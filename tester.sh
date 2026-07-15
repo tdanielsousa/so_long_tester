@@ -1,24 +1,21 @@
 #!/bin/bash
 
-# -=-=-=-=- Colors -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 DEF_COLOR='\033[0;39m'
 RED='\033[1;91m'
 GREEN='\033[1;92m'
 GRAY='\033[0;90m'
-# -=-=-=-=- Colors -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
 C=1
 FILE=$PWD/so_long
 TEST=test_check.txt
 
 if [ ! -f "$FILE" ]; then
-    printf "${RED}NO EXIST SO_LONG PROGRAM ${DEF_COLOR}\n"
+    printf "${RED}SO LONG EXEC DOESNT EXIST ${DEF_COLOR}\n"
     exit 1
 fi
 
 rm -f traces.txt
 
-# Function: Check argument count error cases
 check_args_count() {
     local desc="$1"
     shift
@@ -56,7 +53,6 @@ check_args_count() {
     rm -f "$TEST"
 }
 
-# Function: Check error maps
 check_error_map() {
     local map_file="$1"
     local expected_output="$2"
@@ -96,7 +92,7 @@ check_error_map() {
     rm -f "$TEST"
 }
 
-# Function: Check valid maps (no leak check here)
+
 check_valid_map() {
     local map_file="$1"
     ./so_long "$map_file" & PID=$!
@@ -112,7 +108,7 @@ check_valid_map() {
     ((C++))
 }
 
-# Run tests
+# Tests identity to find errors
 check_args_count "Wrong number of arguments"             # 1: No args
 check_args_count "Wrong number of arguments" invent.ber more argv # 2
 
@@ -172,9 +168,6 @@ check_error_map "maps//no_valid_road12.ber" "Duplicate exit" #52
 check_error_map "maps//no_valid_road13.ber" "Duplicate exit" #53
 check_error_map "maps//no_valid_road14.ber" "Duplicate exit" #54
 check_error_map "maps//no_valid_road15.ber" "Duplicate exit" #55
-
-#In all these cases your program should run normally and not show any errors.
-#In these cases, memory leaks are not checked, so I recommend that you check them by hand.
 
 check_valid_map "maps/ok.ber" #56
 check_valid_map "maps/ok1.ber" #57
